@@ -50,6 +50,8 @@ h2 { margin: 10px 0 0; }
 .map-panel { grid-column: 1 / -1; padding: 0; overflow: hidden; }
 .map-head { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px 12px; }
 .map-head p { margin: 0; color: #956078; font: .8rem Arial, sans-serif; }
+.map-actions { display: flex; align-items: center; gap: 12px; color: #a26782; font: .75rem Arial, sans-serif; }
+.map-actions button { padding: 8px 10px; font-size: .75rem; }
 #map { height: 330px; width: 100%; background: #f8dbe8; }
 .map-note { padding: 10px 22px 14px; color: #a26782; font: .75rem Arial, sans-serif; }
-@media (max-width: 680px) { header { display: block; } .subtitle { margin-top: 12px; text-align: left; } .dashboard { grid-template-columns: 1fr; } .map-panel { grid-column: auto; } }
+@media (max-width: 680px) { header { display: block; } .subtitle { margin-top: 12px; text-align: left; } .dashboard { grid-template-columns: 1fr; } .map-panel { grid-column: auto; } .map-head, .map-actions { align-items: flex-start; flex-direction: column; } }

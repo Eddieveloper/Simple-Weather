@@ -20,6 +20,8 @@ Then visit `http://localhost:8000/Weather.html`.
 - Get an indoor or outdoor activity idea.
 - See the feels-like temperature and a UV-aware comfort check.
 - Explore the searched location in a MapLibre GL 3D map.
+- View live RainViewer radar tiles on top of the map.
+- Click anywhere on the map or use browser location to pin a forecast spot.
 - Responsive layout for small screens.
 
 ## Data and services
@@ -27,6 +29,7 @@ Then visit `http://localhost:8000/Weather.html`.
 - Weather and geocoding: [Open-Meteo](https://open-meteo.com/)
 - Map rendering: [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/)
 - Map tiles and style: [OpenFreeMap](https://openfreemap.org/)
+- Radar tiles: [RainViewer](https://www.rainviewer.com/api.html)
 
 The app uses CDN-hosted MapLibre assets and public APIs, so an internet connection is required for live data and the map. No API keys are needed for the current services.
 
