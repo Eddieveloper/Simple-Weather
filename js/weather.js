@@ -39,6 +39,9 @@ function updateExtras(hourly, current) {
 	const wet = current.weather_code >= 51 && current.weather_code <= 99;
 	document.querySelector('#clothing').textContent = wet ? 'Bring a cute raincoat and shoes that can handle puddles.' : chilly ? 'Layer up with a soft cardigan and keep your toes cozy.' : 'Light layers, comfy shoes, and your favorite sunny-day accessory.';
 	document.querySelector('#activity').textContent = wet ? 'Café date, museum wander, or a cozy creative afternoon.' : 'Perfect for a park stroll, picnic, or little photo walk.';
+	const uv = Math.round(current.uv_index || 0);
+	const uvAdvice = uv >= 6 ? `UV ${uv}: sunglasses and sunscreen are a good idea.` : uv >= 3 ? `UV ${uv}: a little sunscreen will keep the day comfy.` : `UV ${uv}: gentle sunshine, no special sun prep needed.`;
+	document.querySelector('#comfort').textContent = uvAdvice;
 }
 
 async function getWeather(city) {
@@ -47,13 +50,14 @@ async function getWeather(city) {
 		const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`).then(response => response.json());
 		if (!geo.results?.length) throw new Error('City not found.');
 		const place = geo.results[0];
-		const data = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&hourly=precipitation_probability&forecast_days=1&temperature_unit=celsius&wind_speed_unit=kmh`).then(response => response.json());
+		const data = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code,uv_index&hourly=precipitation_probability&forecast_days=1&temperature_unit=celsius&wind_speed_unit=kmh`).then(response => response.json());
 		const current = data.current;
 		const [icon, condition] = weatherCodes[current.weather_code] || ['🌦️', 'Mixed weather'];
 		document.querySelector('#city').textContent = `${place.name}, ${place.country_code}`;
 		document.querySelector('#temperature').textContent = Math.round(current.temperature_2m);
 		document.querySelector('#humidity').textContent = current.relative_humidity_2m;
 		document.querySelector('#wind').textContent = Math.round(current.wind_speed_10m);
+		document.querySelector('#feelsLike').textContent = Math.round(current.apparent_temperature);
 		document.querySelector('#icon').textContent = icon;
 		document.querySelector('#condition').textContent = condition;
 		updateExtras(data.hourly, current);

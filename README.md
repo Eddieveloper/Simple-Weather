@@ -18,6 +18,7 @@ Then visit `http://localhost:8000/Weather.html`.
 - See the next six hours of precipitation probability.
 - Get a simple clothing recommendation based on temperature and weather code.
 - Get an indoor or outdoor activity idea.
+- See the feels-like temperature and a UV-aware comfort check.
 - Explore the searched location in a MapLibre GL 3D map.
 - Responsive layout for small screens.
 
