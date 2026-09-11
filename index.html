@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloudy with a Chance of Cute · Pink Weather Dashboard</title>
+    <meta
+      name="description"
+      content="A playful pink weather dashboard: hyper-local rain timing, smart outfit tips, a 5-day outlook, and a live 3D map with animated rain radar."
+    />
+    <meta name="theme-color" content="#ffd9e9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#241019" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content="Cloudy with a Chance of Cute" />
+    <meta
+      property="og:description"
+      content="Your pocket weather friend for tiny plans, cozy outfits, and knowing exactly when to dodge the rain."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <link rel="preconnect" href="https://api.open-meteo.com" />
+    <link rel="preconnect" href="https://geocoding-api.open-meteo.com" />
+    <link rel="preconnect" href="https://tiles.openfreemap.org" />
+    <link rel="preconnect" href="https://api.rainviewer.com" />
+    <link
+      href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <link href="css/weather.css" rel="stylesheet" />
+  </head>
+  <body>
+    <a class="skip-link" href="#weather">Skip to forecast</a>
+    <main class="app">
+      <header>
+        <div>
+          <p class="eyebrow">♡ tiny forecast, big feelings</p>
+          <h1>Cloudy with a<br />chance of cute</h1>
+        </div>
+        <div class="header-side">
+          <p class="subtitle">
+            Your pocket weather friend for tiny plans, cozy outfits, and knowing
+            exactly when to dodge the rain.
+          </p>
+          <div class="prefs">
+            <div class="segmented" role="group" aria-label="Temperature units">
+              <button type="button" data-units="celsius" aria-pressed="true">°C</button>
+              <button type="button" data-units="fahrenheit" aria-pressed="false">°F</button>
+            </div>
+            <button type="button" id="themeButton" class="ghost-button">◐ Auto</button>
+          </div>
+        </div>
+      </header>
+
+      <form class="search" id="searchForm" role="search">
+        <label class="visually-hidden" for="cityInput">City name</label>
+        <input
+          id="cityInput"
+          type="text"
+          placeholder="Enter a city"
+          value="London"
+          list="recentCities"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="100"
+        />
+        <datalist id="recentCities"></datalist>
+        <button type="submit" id="searchButton">Find my forecast</button>
+        <button
+          type="button"
+          id="refreshButton"
+          class="ghost-button"
+          title="Refresh forecast"
+          aria-label="Refresh forecast"
+        >
+          ↻
+        </button>
+      </form>
+      <p class="error" id="error" role="alert"></p>
+
+      <div class="dashboard">
+        <section class="panel weather" id="weather" aria-live="polite" aria-busy="false">
+          <div class="icon" id="icon" aria-hidden="true">☀️</div>
+          <h2 id="city">London</h2>
+          <div class="temperature">
+            <span id="temperature">18</span><span id="tempUnit">°C</span>
+          </div>
+          <div class="condition" id="condition">Clear sky</div>
+          <div class="details">
+            <div>💧 <span id="humidity">60</span>%<small>Humidity</small></div>
+            <div>
+              💨 <span id="wind">12</span> <span id="windUnit">km/h</span><small>Wind</small>
+            </div>
+            <div>
+              🌡️ <span id="feelsLike">18</span><span id="feelsUnit">°C</span
+              ><small>Feels like</small>
+            </div>
+          </div>
+          <p class="updated" id="updated"></p>
+        </section>
+
+        <section class="panel" aria-labelledby="rainTitle">
+          <h3 class="section-title" id="rainTitle">☔ Rain radar <span>next 6 hours</span></h3>
+          <div class="rain-bar" id="rainBar"></div>
+          <div class="info-grid">
+            <div class="tip">
+              <strong>🧥 Smart clothing</strong><span id="clothing">Loading your outfit…</span>
+            </div>
+            <div class="tip">
+              <strong>🌷 Activity planner</strong><span id="activity">Picking a little plan…</span>
+            </div>
+            <div class="tip comfort">
+              <strong>🕶️ Comfort check</strong
+              ><span id="comfort">Checking the little details…</span>
+            </div>
+          </div>
+          <h3 class="section-title daily-heading">📅 The week ahead <span>5-day outlook</span></h3>
+          <div class="daily" id="daily" aria-live="polite"></div>
+        </section>
+
+        <section class="panel map-panel" aria-labelledby="mapTitle">
+          <div class="map-head">
+            <div>
+              <h3 class="section-title" id="mapTitle">📍 Live local map</h3>
+              <p>Click the map to pin a spot, or use your location</p>
+            </div>
+            <div class="map-actions">
+              <button id="locateButton" type="button">◎ Use my location</button>
+              <button id="radarToggle" type="button" hidden>⏸ Pause radar</button>
+              <span id="mapStatus" aria-live="polite">3D map loading…</span>
+            </div>
+          </div>
+          <div id="map"></div>
+          <div class="map-note">
+            <span>Powered by MapLibre GL JS + OpenFreeMap + RainViewer · pink overlay is live rain radar</span>
+            <span id="radarTime"></span>
+          </div>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <p>
+          Made with ♡ · Weather &amp; geocoding by
+          <a href="https://open-meteo.com/">Open-Meteo</a> · Map by
+          <a href="https://maplibre.org/">MapLibre</a> +
+          <a href="https://openfreemap.org/">OpenFreeMap</a> · Radar by
+          <a href="https://www.rainviewer.com/">RainViewer</a>
+        </p>
+      </footer>
+    </main>
+    <noscript>
+      <p class="noscript">This cute little forecast needs JavaScript to fetch live weather data.</p>
+    </noscript>
+    <script defer src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script defer src="js/weather.js"></script>
+  </body>
+</html>

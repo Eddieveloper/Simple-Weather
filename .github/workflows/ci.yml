@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - name: Check JavaScript syntax
+        run: node --check js/weather.js
+
+      - name: Check local references resolve
+        run: |
+          python3 - <<'EOF'
+          import re
+          from pathlib import Path
+
+          root = Path(".")
+          html = (root / "index.html").read_text()
+          js = (root / "js/weather.js").read_text()
+          errors = []
+
+          # Every local src/href in the page must exist on disk.
+          for ref in re.findall(r'(?:src|href)="([^"]+)"', html):
+              if re.match(r"^(https?:|data:|#|mailto:)", ref):
+                  continue
+              if not (root / ref).exists():
+                  errors.append(f"missing asset: {ref}")
+
+          # Every $('#id') lookup in JS must match an id="..." in the page.
+          html_ids = set(re.findall(r'id="([^"]+)"', html))
+          for used_id in set(re.findall(r"\$\('#([\w-]+)'\)", js)):
+              if used_id not in html_ids:
+                  errors.append(f"missing element id: #{used_id}")
+
+          if errors:
+              raise SystemExit("CI failed:\n- " + "\n- ".join(errors))
+          print("All local references resolve.")
+          EOF
