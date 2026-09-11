@@ -15,12 +15,12 @@ Then visit `http://localhost:8000/Weather.html`.
 ## Features
 
 - Search weather by city.
-- See the next six hours of precipitation probability.
+- See the next six hours of precipitation probability and expected rainfall (mm), in each location's local time.
 - Get a simple clothing recommendation based on temperature and weather code.
 - Get an indoor or outdoor activity idea.
 - See the feels-like temperature and a UV-aware comfort check.
 - Explore the searched location in a MapLibre GL 3D map.
-- View live RainViewer radar tiles on top of the map.
+- View live RainViewer past-radar tiles on top of the map (free tier caps radar tiles at zoom 7, so the app overzooms them and deeper zoom stays error-free).
 - Click anywhere on the map or use browser location to pin a forecast spot.
 - Responsive layout for small screens.
 

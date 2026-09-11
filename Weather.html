@@ -3,33 +3,85 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Weather App</title>
+	<title>Simple Weather — Forecasting: Whether or not</title>
 	<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
 	<link href="css/weather.css" rel="stylesheet" />
 </head>
 <body>
 	<main class="app">
-		<header>
-			<div><p class="eyebrow">♡ tiny forecast, big feelings</p><h1>Cloudy with a<br />chance of cute</h1></div>
-			<p class="subtitle">Your pocket weather friend for tiny plans, cozy outfits, and knowing exactly when to dodge the rain.</p>
+		<header class="masthead">
+			<p class="kicker">Forecasting: Whether or not</p>
+			<h1>Cloudy with a<br />chance of cute</h1>
+			<p class="subtitle">Your pocket weather friend.</p>
 		</header>
+
 		<form class="search" id="searchForm">
-			<input id="cityInput" type="text" placeholder="Enter a city" aria-label="City" value="London" />
-			<button type="submit">Find my forecast</button>
+			<label class="visually-hidden" for="cityInput">City</label>
+			<input id="cityInput" type="text" placeholder="Enter a city" autocomplete="off" value="London" />
+			<button type="submit">Get forecast</button>
 		</form>
-		<p class="error" id="error"></p>
+		<p class="error" id="error" role="status"></p>
+
 		<div class="dashboard">
-			<section class="panel weather" id="weather" aria-live="polite">
-				<div class="icon" id="icon">☀️</div><h2 id="city">London</h2>
-				<div class="temperature"><span id="temperature">18</span>°C</div><div class="condition" id="condition">Clear sky</div>
-				<div class="details"><div>💧 <span id="humidity">60</span>%<small>Humidity</small></div><div>💨 <span id="wind">12</span> km/h<small>Wind</small></div><div>🌡️ <span id="feelsLike">18</span>°<small>Feels like</small></div></div>
+			<section class="panel now" id="weather" aria-live="polite" aria-label="Current weather">
+				<p class="panel-kicker">Now</p>
+				<h2 id="city">London</h2>
+				<div class="now-main">
+					<div class="icon" id="icon" aria-hidden="true">☀️</div>
+					<div>
+						<div class="temperature"><span id="temperature">18</span>°C</div>
+						<div class="condition" id="condition">Clear sky</div>
+					</div>
+				</div>
+				<dl class="stats">
+					<div><dt>Humidity</dt><dd><span id="humidity">60</span>%</dd></div>
+					<div><dt>Wind</dt><dd><span id="wind">12</span> km/h</dd></div>
+					<div><dt>Feels like</dt><dd><span id="feelsLike">18</span>°</dd></div>
+				</dl>
 			</section>
-			<section class="panel">
-				<h3 class="section-title">☔ Rain radar <span>next 6 hours</span></h3>
-				<div class="rain-bar" id="rainBar"></div>
-				<div class="info-grid"><div class="tip"><strong>🧥 Smart clothing</strong><span id="clothing">Loading your outfit...</span></div><div class="tip"><strong>🌷 Activity planner</strong><span id="activity">Picking a little plan...</span></div><div class="tip comfort"><strong>🕶️ Comfort check</strong><span id="comfort">Checking the little details...</span></div></div>
+
+			<section class="panel rain" aria-label="Rain forecast">
+				<div class="panel-head">
+					<div>
+						<p class="panel-kicker">Rain forecast</p>
+						<h2 class="panel-title">Next 6 hours</h2>
+					</div>
+					<p class="rain-summary" id="rainSummary">Loading rain data…</p>
+				</div>
+				<div class="rain-chart" id="rainBar"></div>
+				<p class="rain-footnote">Chance of rain and expected rainfall, hour by hour in local time.</p>
 			</section>
-			<section class="panel map-panel"><div class="map-head"><div><h3 class="section-title">📍 Live local map</h3><p>Click the map to pin a spot, or use your location</p></div><div class="map-actions"><button id="locateButton" type="button">◎ Use my location</button><span id="mapStatus">3D map loading...</span></div></div><div id="map"></div><div class="map-note">Powered by MapLibre GL JS + OpenFreeMap + RainViewer · pink overlay shows live rain radar</div></section>
+
+			<section class="strip" aria-label="Day planner">
+				<article class="tip">
+					<p class="panel-kicker">Clothing</p>
+					<p id="clothing">Loading your outfit…</p>
+				</article>
+				<article class="tip">
+					<p class="panel-kicker">Activity</p>
+					<p id="activity">Picking a little plan…</p>
+				</article>
+				<article class="tip">
+					<p class="panel-kicker">Comfort</p>
+					<p id="comfort">Checking the little details…</p>
+				</article>
+			</section>
+
+			<section class="panel map-panel" aria-label="Local map">
+				<div class="map-head">
+					<div>
+						<p class="panel-kicker">Local map</p>
+						<h2 class="panel-title">Live radar view</h2>
+						<p class="map-sub">Click the map to pin a spot, or use your location.</p>
+					</div>
+					<div class="map-actions">
+						<button id="locateButton" type="button">Use my location</button>
+						<span id="mapStatus">3D map loading…</span>
+					</div>
+				</div>
+				<div id="map"></div>
+				<p class="map-note">Radar <span id="radarTime">loading…</span> · MapLibre + OpenFreeMap + RainViewer</p>
+			</section>
 		</div>
 	</main>
 	<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
