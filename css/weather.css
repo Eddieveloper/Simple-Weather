@@ -1,6 +1,7 @@
 :root,
 :root[data-theme="light"] {
   color-scheme: light;
+  --font: "Quicksand", "Segoe UI", system-ui, sans-serif;
   --bg-base: #fff5fa;
   --bg-wash: #ffe4f0;
   --dot: #f5b5d0;
@@ -21,6 +22,7 @@
   --focus: #b94278;
   --on-accent: #ffffff;
   --shadow: rgba(166, 61, 112, 0.16);
+  --shine: rgba(255, 255, 255, 0.55);
 }
 
 :root[data-theme="dark"] {
@@ -45,6 +47,7 @@
   --focus: #f2a5c8;
   --on-accent: #3a0f24;
   --shadow: rgba(0, 0, 0, 0.5);
+  --shine: rgba(255, 255, 255, 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -70,6 +73,7 @@
     --focus: #f2a5c8;
     --on-accent: #3a0f24;
     --shadow: rgba(0, 0, 0, 0.5);
+    --shine: rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -81,7 +85,8 @@ body {
   margin: 0;
   min-height: 100vh;
   padding: 32px 18px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font);
+  font-weight: 500;
   color: var(--ink);
   background-color: var(--bg-base);
   background-image: url("../assets/sparkle.svg"),
@@ -113,7 +118,7 @@ body {
   border-radius: 12px;
   background: var(--accent);
   color: var(--on-accent);
-  font: 700 0.85rem Arial, sans-serif;
+  font: 700 0.85rem var(--font);
   text-decoration: none;
   transition: top 0.15s ease;
 }
@@ -148,7 +153,7 @@ header {
 .eyebrow {
   margin: 0 0 6px;
   color: var(--accent);
-  font: 700 0.78rem/1.2 Arial, sans-serif;
+  font: 700 0.78rem/1.2 var(--font);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -156,6 +161,8 @@ header {
 h1 {
   margin: 0;
   font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
   line-height: 0.95;
 }
 
@@ -170,7 +177,7 @@ h1 {
   max-width: 330px;
   margin: 0;
   color: var(--muted);
-  font: 0.95rem/1.45 Arial, sans-serif;
+  font: 0.95rem/1.45 var(--font);
   text-align: right;
 }
 
@@ -192,7 +199,7 @@ h1 {
   border-radius: 0;
   background: var(--panel);
   color: var(--muted);
-  font: 700 0.85rem Arial, sans-serif;
+  font: 700 0.85rem var(--font);
   padding: 8px 12px;
 }
 
@@ -220,6 +227,7 @@ button {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 12px;
+  font-family: var(--font);
   font-size: 1rem;
 }
 
@@ -235,7 +243,7 @@ button {
   color: var(--on-accent);
   background: var(--accent);
   cursor: pointer;
-  font: 700 0.95rem Arial, sans-serif;
+  font: 700 0.95rem var(--font);
   white-space: nowrap;
 }
 
@@ -252,7 +260,7 @@ button:disabled {
   color: var(--accent-strong);
   min-height: 22px;
   margin: 12px 0 0;
-  font: 0.9rem Arial, sans-serif;
+  font: 0.9rem var(--font);
 }
 
 .dashboard {
@@ -295,7 +303,7 @@ button:disabled {
   justify-content: space-around;
   gap: 10px;
   margin-top: 25px;
-  font: 700 1rem Arial, sans-serif;
+  font: 700 1rem var(--font);
 }
 
 small {
@@ -309,11 +317,12 @@ small {
 .updated {
   margin: 16px 0 0;
   color: var(--soft);
-  font: 0.75rem Arial, sans-serif;
+  font: 0.75rem var(--font);
 }
 
 h2 {
   margin: 10px 0 0;
+  font-weight: 700;
 }
 
 .section-title {
@@ -328,47 +337,175 @@ h2 {
 .section-title span {
   color: var(--accent);
   font-size: 0.78rem;
-  font-family: Arial, sans-serif;
+  font-family: var(--font);
+}
+
+.rain-story {
+  margin: -6px 0 12px;
+  padding: 9px 14px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  background: var(--tip);
+  color: var(--tip-strong);
+  font: 600 0.85rem/1.4 var(--font);
+}
+
+.rain-story:empty {
+  display: none;
 }
 
 .rain-bar {
+  position: relative;
   display: flex;
   gap: 8px;
   align-items: end;
-  min-height: 92px;
+  min-height: 168px;
+  padding: 20px 14px 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 11% 20%, var(--dot) 1.2px, transparent 1.8px),
+    radial-gradient(circle at 34% 9%, var(--dot) 1px, transparent 1.6px),
+    radial-gradient(circle at 58% 16%, var(--dot) 1.1px, transparent 1.7px),
+    radial-gradient(circle at 83% 10%, var(--dot) 1px, transparent 1.6px),
+    radial-gradient(circle at 95% 26%, var(--dot) 1.2px, transparent 1.8px),
+    linear-gradient(180deg, var(--tip) 0%, var(--panel) 82%);
+  overflow: hidden;
+}
+
+/* Slow shine sweeping across the little sky so it always feels alive. */
+.rain-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    var(--shine) 47%,
+    var(--shine) 53%,
+    transparent 68%
+  );
+  transform: translateX(-130%);
+  animation: rain-shimmer 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rain-shimmer {
+  55%,
+  100% {
+    transform: translateX(130%);
+  }
 }
 
 .rain-hour {
+  position: relative;
+  z-index: 1;
   flex: 1;
   text-align: center;
-  font: 0.72rem Arial, sans-serif;
+  font: 600 0.72rem var(--font);
   color: var(--muted);
 }
 
 .rain-column {
+  position: relative;
   display: flex;
   align-items: end;
   justify-content: center;
-  height: 54px;
-  margin-bottom: 6px;
+  height: 88px;
+  margin-bottom: 8px;
+  border-bottom: 2px dashed var(--line);
 }
 
-.rain-column i {
+.rain-column .fill {
+  position: relative;
   display: block;
   width: 100%;
-  max-width: 24px;
-  min-height: 5px;
-  border-radius: 8px 8px 3px 3px;
-  background: var(--accent-soft);
+  max-width: 26px;
+  min-height: 12px;
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(180deg, var(--dry-bar), var(--panel));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform-origin: bottom;
+  animation: rain-rise 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
 }
 
-.rain-column i.dry {
-  background: var(--dry-bar);
+.rain-column .fill.wet {
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.rain-column .fill.pouring {
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent-strong));
+  box-shadow:
+    0 0 16px color-mix(in srgb, var(--accent-strong) 55%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Droplet riding the top of a wet bar. */
+.rain-column .drop {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 0 50% 50% 50%;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--accent-strong);
+  animation: rain-bob 2.2s ease-in-out infinite;
+}
+
+@keyframes rain-bob {
+  50% {
+    top: -11px;
+  }
+}
+
+/* Gentle twinkle over dry hours so empty hours still sparkle. */
+.rain-column .twinkle {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent-soft);
+  font-style: normal;
+  font-size: 0.85rem;
+  animation: rain-twinkle 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.rain-column .twinkle.small {
+  top: 42px;
+  left: 66%;
+  font-size: 0.58rem;
+}
+
+@keyframes rain-twinkle {
+  50% {
+    opacity: 0.2;
+    transform: translateX(-50%) scale(0.65) rotate(25deg);
+  }
+}
+
+@keyframes rain-rise {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+
+.rain-hour .chance {
+  margin-top: 2px;
+  font-weight: 700;
+  color: var(--soft);
+}
+
+.rain-hour .chance.high {
+  color: var(--accent-strong);
 }
 
 .info-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 12px;
   margin-top: 18px;
 }
@@ -377,13 +514,45 @@ h2 {
   padding: 14px;
   border-radius: 16px;
   background: var(--tip);
-  font: 0.9rem/1.35 Arial, sans-serif;
+  font: 0.9rem/1.35 var(--font);
 }
 
 .tip strong {
   display: block;
   margin-bottom: 5px;
   color: var(--tip-strong);
+}
+
+.outfit-shuffle {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: var(--panel);
+  color: var(--accent-strong);
+  font-size: 0.8rem;
+  transition: transform 0.15s ease;
+}
+
+.outfit-shuffle:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.outfit-shuffle:active {
+  transform: scale(0.97);
+}
+
+#clothing.flash {
+  display: inline-block;
+  animation: outfit-pop 0.35s ease;
+}
+
+@keyframes outfit-pop {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.98);
+  }
 }
 
 .daily-heading {
@@ -402,7 +571,7 @@ h2 {
   border-radius: 14px;
   background: var(--tip);
   text-align: center;
-  font: 0.78rem/1.4 Arial, sans-serif;
+  font: 0.78rem/1.4 var(--font);
   color: var(--muted);
 }
 
@@ -442,7 +611,7 @@ h2 {
 .map-head p {
   margin: 0;
   color: var(--muted);
-  font: 0.8rem Arial, sans-serif;
+  font: 0.8rem var(--font);
 }
 
 .map-actions {
@@ -451,7 +620,7 @@ h2 {
   align-items: center;
   gap: 12px;
   color: var(--muted);
-  font: 0.75rem Arial, sans-serif;
+  font: 0.75rem var(--font);
 }
 
 .map-actions button {
@@ -472,7 +641,7 @@ h2 {
   flex-wrap: wrap;
   padding: 10px 22px 14px;
   color: var(--muted);
-  font: 0.75rem Arial, sans-serif;
+  font: 0.75rem var(--font);
 }
 
 #radarTime {
@@ -484,7 +653,7 @@ h2 {
   margin-top: 22px;
   text-align: center;
   color: var(--soft);
-  font: 0.8rem Arial, sans-serif;
+  font: 0.8rem var(--font);
 }
 
 .footer a {
@@ -498,7 +667,7 @@ h2 {
   border-radius: 14px;
   background: var(--tip);
   color: var(--ink);
-  font: 0.95rem Arial, sans-serif;
+  font: 0.95rem var(--font);
   text-align: center;
 }
 
@@ -549,12 +718,6 @@ body.is-loading .weather {
   .map-actions {
     align-items: flex-start;
     flex-direction: column;
-  }
-}
-
-@media (max-width: 560px) {
-  .info-grid {
-    grid-template-columns: 1fr;
   }
 }
 

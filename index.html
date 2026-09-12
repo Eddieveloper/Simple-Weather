@@ -11,10 +11,7 @@
     <meta name="theme-color" content="#ffd9e9" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#241019" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content="Cloudy with a Chance of Cute" />
-    <meta
-      property="og:description"
-      content="Your pocket weather friend for tiny plans, cozy outfits, and knowing exactly when to dodge the rain."
-    />
+    <meta property="og:description" content="Your pocket weather friend" />
     <meta property="og:type" content="website" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="site.webmanifest" />
@@ -23,6 +20,12 @@
     <link rel="preconnect" href="https://geocoding-api.open-meteo.com" />
     <link rel="preconnect" href="https://tiles.openfreemap.org" />
     <link rel="preconnect" href="https://api.rainviewer.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
       rel="stylesheet"
@@ -34,14 +37,11 @@
     <main class="app">
       <header>
         <div>
-          <p class="eyebrow">♡ tiny forecast, big feelings</p>
+          <p class="eyebrow">Forecasting: Whether or not</p>
           <h1>Cloudy with a<br />chance of cute</h1>
         </div>
         <div class="header-side">
-          <p class="subtitle">
-            Your pocket weather friend for tiny plans, cozy outfits, and knowing
-            exactly when to dodge the rain.
-          </p>
+          <p class="subtitle">Your pocket weather friend</p>
           <div class="prefs">
             <div class="segmented" role="group" aria-label="Temperature units">
               <button type="button" data-units="celsius" aria-pressed="true">°C</button>
@@ -58,7 +58,7 @@
           id="cityInput"
           type="text"
           placeholder="Enter a city"
-          value="London"
+          value="Alta, Sweden"
           list="recentCities"
           autocomplete="off"
           spellcheck="false"
@@ -81,7 +81,7 @@
       <div class="dashboard">
         <section class="panel weather" id="weather" aria-live="polite" aria-busy="false">
           <div class="icon" id="icon" aria-hidden="true">☀️</div>
-          <h2 id="city">London</h2>
+          <h2 id="city">Alta, Sweden</h2>
           <div class="temperature">
             <span id="temperature">18</span><span id="tempUnit">°C</span>
           </div>
@@ -101,17 +101,15 @@
 
         <section class="panel" aria-labelledby="rainTitle">
           <h3 class="section-title" id="rainTitle">☔ Rain radar <span>next 6 hours</span></h3>
+          <p class="rain-story" id="rainStory" aria-live="polite"></p>
           <div class="rain-bar" id="rainBar"></div>
           <div class="info-grid">
             <div class="tip">
               <strong>🧥 Smart clothing</strong><span id="clothing">Loading your outfit…</span>
+              <button type="button" id="shuffleOutfit" class="outfit-shuffle">🎲 Randomize outfit</button>
             </div>
             <div class="tip">
               <strong>🌷 Activity planner</strong><span id="activity">Picking a little plan…</span>
-            </div>
-            <div class="tip comfort">
-              <strong>🕶️ Comfort check</strong
-              ><span id="comfort">Checking the little details…</span>
             </div>
           </div>
           <h3 class="section-title daily-heading">📅 The week ahead <span>5-day outlook</span></h3>
